@@ -20,4 +20,30 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 
 [cc-by-sa-img-small]: img/cc-by-sa-small.png "Creative Commons Attribution ShareAlike 4.0 International License"
 
+--------------------------------------------------------------------------------
+
+## Contexto
+
+### a.k.a. _"mi veldá"_
+
+--------------------------------------------------------------------------------
+
+![](img/tareas-plataforma.jpg "Lo mejor que puedo hacer es una página con notas")
+
+--------------------------------------------------------------------------------
+
+## `&nbsp;`
+
+--------------------------------------------------------------------------------
+
+## Gracias
+
+&nbsp;
+
+Andrés Hernández - `tonejito`
+
+<!-- <img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" /> -->
+
+[![][cc-by-sa-img-big]][cc-by-sa-page]
+
 <!--	----------------------------------------------------------------	-->
