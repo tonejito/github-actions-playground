@@ -1,3 +1,21 @@
+---
+title: Tareas en GIT
+subtitle: add, commit, push, repeat.
+author:
+- Andrés Hernández - `tonejito`
+date: 2023 - 04
+affiliation:
+- http://localhost/
+abstract: |
+  ¿Por qué 🤬 pido a los alumnos que entreguen las tareas en GIT?
+description: |
+  ¿Por qué 🤬 pido a los alumnos que entreguen las tareas en GIT?
+copyright: CC-BY-SA-4.0
+ROBOTS:	NOINDEX, UNFOLLOW
+baseheaderlevel: 2
+lang: es-MX
+---
+
 ## ¿Por qué 🤬 pido a los alumnos que entreguen las tareas en `git`?	{ .slide: data-visibility="hidden,uncounted" }
 
 &nbsp;
@@ -8,7 +26,7 @@ Andrés Hernández - `tonejito`
 
 <!-- <img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" /> -->
 
-[![][cc-by-sa-img-small]][cc-by-sa-page]
+[![][cc-by-sa-img-big]][cc-by-sa-page]
 
 <!--
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
