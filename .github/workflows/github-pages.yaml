@@ -20,9 +20,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  prepare:
+
+  build:
     runs-on: ubuntu-latest
     steps:
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -117,19 +119,11 @@ jobs:
           pip3 install --user --upgrade pip
           pip3 install --user pre-commit
 
-  check:
-    needs: prepare
-    runs-on: ubuntu-latest
-    steps:
       - name: Run pre-commit
         run: |
           pre-commit install
           make check
 
-  build:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
       # - name: Build the site with Makefile
       #   run: |
       #     make build
@@ -145,10 +139,6 @@ jobs:
             --defaults
             pandoc.cfg
 
-  pack:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       # Inside the ZIP file there needs to be *only one file* named 'artifact.tar'
       - name: Archive artifact
         shell: bash
@@ -170,7 +160,7 @@ jobs:
           retention-days: 0
 
   deploy:
-    needs: pack
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
