@@ -10,6 +10,4 @@ check:
 
 build:	${INPUT}
 	test -d public || mkdir -vp public
-	which pandoc
-	pandoc --version
 	pandoc ${PANDOC_FLAGS}
