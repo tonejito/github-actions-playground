@@ -72,7 +72,7 @@ jobs:
           PANDOC_TAR: "/tmp/pandoc.tar.gz"
         run: |
           wget -c -nv -O "${PANDOC_TAR}" "${PANDOC_TAR_URL}"
-          sudo tar -xvzf "${PANDOC_TAR}" --strip-components 1 -C /usr/local
+          sudo tar -xzf "${PANDOC_TAR}" --strip-components 1 -C /usr/local
           rm -v "${PANDOC_TAR}"
           which pandoc
           whereis pandoc
@@ -86,7 +86,6 @@ jobs:
       #   run: |
       #     wget -c -nv -O "${PANDOC_DEB}" "${PANDOC_DEB_URL}"
       #     sudo dpkg -i "${PANDOC_DEB}"
-      #     dpkg -L pandoc
       #     rm -v "${PANDOC_DEB}"
       #     which pandoc
       #     whereis pandoc
