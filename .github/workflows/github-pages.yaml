@@ -33,26 +33,34 @@ jobs:
           python-version: "3.10"
 
       - name: Prepare APT configuration
+        env:
+          APT_CONF_LOCAL: /etc/apt/apt.conf.d/99-local
+          APT_CONF_LOCAL_SRC: ./.github/workflows/apt.local.conf
         run: |
-          sudo truncate --size=0 /etc/apt/apt.conf.d/99-local
-          # echo 'quiet "2";'                   | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'APT::Get::Assume-Yes "1";'    | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'APT::Install-Recommends "0";' | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'APT::Install-Suggests "0";'   | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'APT::Color "0";'              | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'Dpkg::Progress "0";'          | sudo tee -a /etc/apt/apt.conf.d/99-local
-          # echo 'Dpkg::Progress-Fancy "0";'    | sudo tee -a /etc/apt/apt.conf.d/99-local
-          sudo mkdir -vp /etc/apt/apt.conf.d
-          sudo cp -v .github/workflows/apt.local.conf /etc/apt/apt.conf.d/99-local
+          sudo mkdir -vp $(dirname "${APT_CONF_LOCAL}")
+          sudo truncate --size=0 "${APT_CONF_LOCAL}"
+          # echo 'quiet "2";'                   | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'APT::Get::Assume-Yes "1";'    | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'APT::Install-Recommends "0";' | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'APT::Install-Suggests "0";'   | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'APT::Color "0";'              | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'Dpkg::Progress "0";'          | sudo tee -a "${APT_CONF_LOCAL}"
+          # echo 'Dpkg::Progress-Fancy "0";'    | sudo tee -a "${APT_CONF_LOCAL}"
+          sudo cp -v "${APT_CONF_LOCAL_SRC}" "${APT_CONF_LOCAL}"
 
       - name: Prepare PIP configuration
+        env:
+          PIP_CONF: /etc/pip.conf
+          PIP_CONF_LOCAL: ~/.config/pip/pip.conf
+          PIP_CONF_SRC: ./.github/workflows/pip.conf
         run: |
-          sudo truncate --size=0 /etc/apt/apt.conf.d/99-local ~/.config/pip/pip.conf
+          mkdir -vp $(dirname "${PIP_CONF_LOCAL}")
+          sudo truncate --size=0 "${PIP_CONF}"
+          truncate --size=0 "${PIP_CONF_LOCAL}"
           # sudo pip config --global set global.quiet 1
           # sudo pip config --global set global.progress_bar off
-          mkdir -vp ~/.config/pip
-          sudo cp -v .github/workflows/pip.conf /etc/pip.conf
-          cp -v .github/workflows/pip.conf ~/.config/pip/pip.conf
+          sudo cp -v "${PIP_CONF_SRC}" "${PIP_CONF}"
+          cp -v "${PIP_CONF_SRC}" "${PIP_CONF_LOCAL}"
 
       - name: Debian APT
         env:
