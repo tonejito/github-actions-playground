@@ -38,6 +38,12 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 
 [cc-by-sa-img-small]: img/cc-by-sa-small.png "Creative Commons Attribution ShareAlike 4.0 International License"
 
+[![][github-badge]][github-repo]
+
+[github-repo]: https://github.com/tonejito/github-actions-playground
+
+[github-badge]: https://github.com/tonejito/github-actions-playground/actions/workflows/github-pages.yaml/badge.svg
+
 --------------------------------------------------------------------------------
 
 ## Contexto
