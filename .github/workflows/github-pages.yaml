@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -109,10 +109,22 @@ jobs:
           pip3 install --user --upgrade pip
           pip3 install --user pre-commit
 
+  check:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
       - name: Run pre-commit
         run: |
           pre-commit install
           make check
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Build the site with Makefile
+      #   run: |
+      #     make build
 
       # https://github.com/pandoc/pandoc-action-example
       # https://hub.docker.com/r/pandoc/extra
@@ -125,10 +137,10 @@ jobs:
             --defaults
             pandoc.cfg
 
-      # - name: Build the site
-      #   run: |
-      #     make build
-
+  pack:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       # Inside the ZIP file there needs to be *only one file* named 'artifact.tar'
       - name: Archive artifact
         shell: bash
@@ -150,7 +162,7 @@ jobs:
           retention-days: 0
 
   deploy:
-    needs: build
+    needs: pack
     runs-on: ubuntu-latest
     environment:
       name: github-pages
