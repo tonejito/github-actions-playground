@@ -22,16 +22,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # runs-on: pandoc/extra:3.1-alpine
-    # runs-on: pandoc/extra:3.1-ubuntu
-    env:
-      TERM: linux
-      DEBIAN_PRIORITY: critical
-      DEBIAN_FRONTEND: noninteractive
-      DEBCONF_NOWARNINGS: "yes"
-      DEBCONF_TERSE: "yes"
-      DEBCONF_NONINTERACTIVE_SEEN: "true"
-
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
@@ -65,6 +55,13 @@ jobs:
           cp -v .github/workflows/pip.conf ~/.config/pip/pip.conf
 
       - name: Debian APT
+        env:
+          TERM: linux
+          DEBIAN_PRIORITY: critical
+          DEBIAN_FRONTEND: noninteractive
+          DEBCONF_NOWARNINGS: "yes"
+          DEBCONF_TERSE: "yes"
+          DEBCONF_NONINTERACTIVE_SEEN: "true"
         run: |
           sudo apt-get -q=2 update
           sudo apt-get -q=2 install make git wget
