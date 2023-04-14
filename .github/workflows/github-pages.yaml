@@ -66,17 +66,17 @@ jobs:
           sudo apt-get -q=2 install make git wget
 
       # https://pandoc.org/installing.html#linux
-      - name: Install pandoc from TAR
-        env:
-          PANDOC_TAR_URL: "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz"
-          PANDOC_TAR: "/tmp/pandoc.tar.gz"
-        run: |
-          wget -c -nv -O "${PANDOC_TAR}" "${PANDOC_TAR_URL}"
-          sudo tar -xzf "${PANDOC_TAR}" --strip-components 1 -C /usr/local
-          rm -v "${PANDOC_TAR}"
-          which pandoc
-          whereis pandoc
-          pandoc --version
+      # - name: Install pandoc from TAR
+      #   env:
+      #     PANDOC_TAR_URL: "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz"
+      #     PANDOC_TAR: "/tmp/pandoc.tar.gz"
+      #   run: |
+      #     wget -c -nv -O "${PANDOC_TAR}" "${PANDOC_TAR_URL}"
+      #     sudo tar -xzf "${PANDOC_TAR}" --strip-components 1 -C /usr/local
+      #     rm -v "${PANDOC_TAR}"
+      #     which pandoc
+      #     whereis pandoc
+      #     pandoc --version
 
       # https://pandoc.org/installing.html#linux
       # - name: Install pandoc from DEB
@@ -90,6 +90,18 @@ jobs:
       #     which pandoc
       #     whereis pandoc
       #     pandoc --version
+
+      # https://github.com/pandoc/actions/tree/main/setup
+      - name: Install pandoc DEB via GitHub actions
+        uses: pandoc/actions/setup@v1.0.0
+        with:
+          version: 3.1
+
+      - name: Check pandoc
+        run: |
+          which pandoc
+          whereis pandoc
+          pandoc --version
 
       - name: Python PIP
         run: |
