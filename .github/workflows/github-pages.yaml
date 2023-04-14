@@ -92,16 +92,16 @@ jobs:
       #     pandoc --version
 
       # https://github.com/pandoc/actions/tree/main/setup
-      - name: Install pandoc DEB via GitHub actions
-        uses: pandoc/actions/setup@v1.0.0
-        with:
-          version: 3.1
+      # - name: Install pandoc DEB via GitHub actions
+      #   uses: pandoc/actions/setup@v1.0.0
+      #   with:
+      #     version: 3.1
 
-      - name: Check pandoc
-        run: |
-          which pandoc
-          whereis pandoc
-          pandoc --version
+      # - name: Check pandoc
+      #   run: |
+      #     which pandoc
+      #     whereis pandoc
+      #     pandoc --version
 
       - name: Python PIP
         run: |
@@ -113,9 +113,20 @@ jobs:
           pre-commit install
           make check
 
-      - name: Build the site
-        run: |
-          make build
+      # https://github.com/pandoc/pandoc-action-example
+      # https://hub.docker.com/r/pandoc/extra
+      - name: Build the site with pandoc docker image
+        # uses: docker://pandoc/extra:3.1
+        uses: docker://pandoc/extra:3.1-alpine
+        # uses: docker://pandoc/extra:3.1-ubuntu
+        with:
+          args: >-  # allows you to break string into multiple lines
+            --defaults
+            pandoc.cfg
+
+      # - name: Build the site
+      #   run: |
+      #     make build
 
       # Inside the ZIP file there needs to be *only one file* named 'artifact.tar'
       - name: Archive artifact
