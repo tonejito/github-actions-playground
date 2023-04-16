@@ -21,9 +21,9 @@ on:
 
 jobs:
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       # - name: Checkout repository
@@ -129,6 +129,98 @@ jobs:
       # - name: Build the site with Makefile
       #   run: |
       #     make build
+
+  check:
+    runs-on: ubuntu-latest
+    container:
+      # This image runs with the 'root' user, thus the following warning WILL appear when executing PIP
+        # WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager.
+        # It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+      image: python:3.11-slim-bullseye
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+      - name: Fix permissions on HOME
+        run: |
+          chown -R "$(id -u):$(id -g)" "${HOME}"
+
+      - name: Set PATH
+        shell: bash
+        run: |
+          echo "${HOME}/.local/bin" >> $GITHUB_PATH
+
+      - name: Configure APT
+        env:
+          APT_CONF_LOCAL: /etc/apt/apt.conf.d/99-local
+        # This container runs as root, `sudo` is not needed before `tee`
+        run: |
+          mkdir -vp $(dirname "${APT_CONF_LOCAL}")
+          truncate --size=0 "${APT_CONF_LOCAL}"
+          echo 'quiet "2";'                   | tee -a "${APT_CONF_LOCAL}"
+          echo 'APT::Get::Assume-Yes "1";'    | tee -a "${APT_CONF_LOCAL}"
+          echo 'APT::Install-Recommends "0";' | tee -a "${APT_CONF_LOCAL}"
+          echo 'APT::Install-Suggests "0";'   | tee -a "${APT_CONF_LOCAL}"
+          echo 'APT::Color "0";'              | tee -a "${APT_CONF_LOCAL}"
+          echo 'Dpkg::Progress "0";'          | tee -a "${APT_CONF_LOCAL}"
+          echo 'Dpkg::Progress-Fancy "0";'    | tee -a "${APT_CONF_LOCAL}"
+
+      - name: Install packages with APT
+        env:
+          TERM: linux
+          DEBIAN_PRIORITY: critical
+          DEBIAN_FRONTEND: noninteractive
+          DEBCONF_NOWARNINGS: "yes"
+          DEBCONF_TERSE: "yes"
+          DEBCONF_NONINTERACTIVE_SEEN: "true"
+        run: |
+          apt-get -q=2 update
+          apt-get -q=2 install make git wget
+
+      - name: Configure Python
+        shell: bash
+        run: |
+          pip3 config --global set global.quiet 1
+          pip3 config --global set global.progress_bar off
+          pip3 install --user --upgrade pip
+
+      - name: Install pre-commit
+        shell: bash
+        run: |
+          pip3 install --user pre-commit
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          set-safe-directory: true
+
+      # Add repository path as safe.directory for git "system" config
+      # This is needed when running inside a container
+      - name: Mark repository as 'safe' in SYSTEM git config
+        shell: bash
+        run: |
+          git config --system --add safe.directory "${GITHUB_WORKSPACE}"
+          chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}"
+
+      - name: Run pre-commit via custom action
+        uses: pre-commit/action@v3.0.0
+
+      # - name: Run pre-commit
+      #   shell: bash
+      #   run: |
+      #     pre-commit install || cat ${HOME}/.cache/pre-commit/pre-commit.log
+      #     pre-commit run --all-files
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       # https://github.com/pandoc/pandoc-action-example
       # https://hub.docker.com/r/pandoc/extra
