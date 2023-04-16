@@ -152,19 +152,23 @@ jobs:
           echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
       - name: Configure APT
+        shell: bash
         env:
           APT_CONF_LOCAL: /etc/apt/apt.conf.d/99-local
         # This container runs as root, `sudo` is not needed before `tee`
         run: |
           mkdir -vp $(dirname "${APT_CONF_LOCAL}")
           truncate --size=0 "${APT_CONF_LOCAL}"
-          echo 'quiet "2";'                   | tee -a "${APT_CONF_LOCAL}"
-          echo 'APT::Get::Assume-Yes "1";'    | tee -a "${APT_CONF_LOCAL}"
-          echo 'APT::Install-Recommends "0";' | tee -a "${APT_CONF_LOCAL}"
-          echo 'APT::Install-Suggests "0";'   | tee -a "${APT_CONF_LOCAL}"
-          echo 'APT::Color "0";'              | tee -a "${APT_CONF_LOCAL}"
-          echo 'Dpkg::Progress "0";'          | tee -a "${APT_CONF_LOCAL}"
-          echo 'Dpkg::Progress-Fancy "0";'    | tee -a "${APT_CONF_LOCAL}"
+          cat | tee -a "${APT_CONF_LOCAL}" << EOF
+            #	/etc/apt/apt.conf.d/99-local
+            quiet "2";
+            APT::Get::Assume-Yes "1";
+            APT::Install-Recommends "0";
+            APT::Install-Suggests "0";
+            APT::Color "0";
+            Dpkg::Progress "0";
+            Dpkg::Progress-Fancy "0";
+          EOF
 
       - name: Install packages with APT
         env:
