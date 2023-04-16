@@ -1,6 +1,6 @@
 #	.github/workflows/github-pages.yaml
 
-# Ensure GitLab Pages is enabled
+# Ensure GitHub Pages is enabled
 # Create a '.nojekyll' file in the root of the repository
 
 name: build
@@ -26,55 +26,57 @@ jobs:
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # - name: Checkout repository
+      #   uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4.0.0
-        with:
-          python-version: "3.10"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v4.0.0
+      #   with:
+      #     python-version: "3.10"
 
-      - name: Prepare APT configuration
-        env:
-          APT_CONF_LOCAL: /etc/apt/apt.conf.d/99-local
-          APT_CONF_LOCAL_SRC: ./.github/workflows/apt.local.conf
-        run: |
-          sudo mkdir -vp $(dirname "${APT_CONF_LOCAL}")
-          sudo truncate --size=0 "${APT_CONF_LOCAL}"
-          # echo 'quiet "2";'                   | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'APT::Get::Assume-Yes "1";'    | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'APT::Install-Recommends "0";' | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'APT::Install-Suggests "0";'   | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'APT::Color "0";'              | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'Dpkg::Progress "0";'          | sudo tee -a "${APT_CONF_LOCAL}"
-          # echo 'Dpkg::Progress-Fancy "0";'    | sudo tee -a "${APT_CONF_LOCAL}"
-          sudo cp -v "${APT_CONF_LOCAL_SRC}" "${APT_CONF_LOCAL}"
+      # TODO: Cache
+      # - name: Prepare APT configuration
+      #   env:
+      #     APT_CONF_LOCAL: /etc/apt/apt.conf.d/99-local
+      #     APT_CONF_LOCAL_SRC: ./.github/workflows/apt.local.conf
+      #   run: |
+      #     sudo mkdir -vp $(dirname "${APT_CONF_LOCAL}")
+      #     sudo truncate --size=0 "${APT_CONF_LOCAL}"
+      #     # echo 'quiet "2";'                   | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'APT::Get::Assume-Yes "1";'    | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'APT::Install-Recommends "0";' | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'APT::Install-Suggests "0";'   | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'APT::Color "0";'              | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'Dpkg::Progress "0";'          | sudo tee -a "${APT_CONF_LOCAL}"
+      #     # echo 'Dpkg::Progress-Fancy "0";'    | sudo tee -a "${APT_CONF_LOCAL}"
+      #     sudo cp -v "${APT_CONF_LOCAL_SRC}" "${APT_CONF_LOCAL}"
 
-      - name: Prepare PIP configuration
-        env:
-          PIP_CONF: /etc/pip.conf
-          PIP_CONF_LOCAL: ~/.config/pip/pip.conf
-          PIP_CONF_SRC: ./.github/workflows/pip.conf
-        run: |
-          mkdir -vp $(dirname "${PIP_CONF_LOCAL}")
-          sudo truncate --size=0 "${PIP_CONF}"
-          truncate --size=0 "${PIP_CONF_LOCAL}"
-          # sudo pip config --global set global.quiet 1
-          # sudo pip config --global set global.progress_bar off
-          sudo cp -v "${PIP_CONF_SRC}" "${PIP_CONF}"
-          cp -v "${PIP_CONF_SRC}" "${PIP_CONF_LOCAL}"
+      # TODO: Cache
+      # - name: Prepare PIP configuration
+      #   env:
+      #     PIP_CONF: /etc/pip.conf
+      #     PIP_CONF_LOCAL: ~/.config/pip/pip.conf
+      #     PIP_CONF_SRC: ./.github/workflows/pip.conf
+      #   run: |
+      #     mkdir -vp $(dirname "${PIP_CONF_LOCAL}")
+      #     sudo truncate --size=0 "${PIP_CONF}"
+      #     truncate --size=0 "${PIP_CONF_LOCAL}"
+      #     # sudo pip config --global set global.quiet 1
+      #     # sudo pip config --global set global.progress_bar off
+      #     sudo cp -v "${PIP_CONF_SRC}" "${PIP_CONF}"
+      #     cp -v "${PIP_CONF_SRC}" "${PIP_CONF_LOCAL}"
 
-      - name: Debian APT
-        env:
-          TERM: linux
-          DEBIAN_PRIORITY: critical
-          DEBIAN_FRONTEND: noninteractive
-          DEBCONF_NOWARNINGS: "yes"
-          DEBCONF_TERSE: "yes"
-          DEBCONF_NONINTERACTIVE_SEEN: "true"
-        run: |
-          sudo apt-get -q=2 update
-          sudo apt-get -q=2 install make git wget
+      # - name: Debian APT
+      #   env:
+      #     TERM: linux
+      #     DEBIAN_PRIORITY: critical
+      #     DEBIAN_FRONTEND: noninteractive
+      #     DEBCONF_NOWARNINGS: "yes"
+      #     DEBCONF_TERSE: "yes"
+      #     DEBCONF_NONINTERACTIVE_SEEN: "true"
+      #   run: |
+      #     sudo apt-get -q=2 update
+      #     sudo apt-get -q=2 install make git wget
 
       # https://pandoc.org/installing.html#linux
       # - name: Install pandoc from TAR
@@ -114,15 +116,15 @@ jobs:
       #     whereis pandoc
       #     pandoc --version
 
-      - name: Python PIP
-        run: |
-          pip3 install --user --upgrade pip
-          pip3 install --user pre-commit
+      # - name: Python PIP
+      #   run: |
+      #     pip3 install --user --upgrade pip
+      #     pip3 install --user pre-commit
 
-      - name: Run pre-commit
-        run: |
-          pre-commit install
-          make check
+      # - name: Run pre-commit
+      #   run: |
+      #     pre-commit install
+      #     make check
 
       # - name: Build the site with Makefile
       #   run: |
