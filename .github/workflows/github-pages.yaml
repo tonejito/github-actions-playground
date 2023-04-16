@@ -3,7 +3,7 @@
 # Ensure GitHub Pages is enabled
 # Create a '.nojekyll' file in the root of the repository
 
-name: build
+name: github-pages
 
 permissions:
   id-token: write
