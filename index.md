@@ -22,7 +22,7 @@ Andrés Hernández - `tonejito`
 
 ![][🐰]
 
-<!-- <img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" /> -->
+<img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" />
 
 [![][cc-by-sa-img-big]][cc-by-sa-page]
 
