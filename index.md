@@ -20,15 +20,38 @@ lang: es-MX
 
 Andrés Hernández - `tonejito`
 
+<img id="mail" class="mail" title="📩" loading="eager" src="img/mail.svg" />
+
+:::::::::::::: {.columns}
+::: {.column width="33%"}
+
 ![][🐰]
 
-<img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" />
+:::
+::: {.column width="33%"}
 
 [![][cc-by-sa-img-big]][cc-by-sa-page]
 
+:::
+::: {.column width="33%"}
+
+[![][github-badge]][github-repo]
+
+:::
+::::::::::::::
+
 <!--
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License:
+
+* <http://creativecommons.org/licenses/by-sa/4.0/>
 -->
+
+::: notes
+
+- ¿Por qué 🤬 pido a los alumnos que entreguen las tareas en `git`?
+
+:::
+
 
 [🐰]: https://gravatar.com/avatar/4cc702785290b4934c531c56f6061e5e.png "🐰"
 
@@ -37,8 +60,6 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 [cc-by-sa-img-big]: img/cc-by-sa.png "Creative Commons Attribution ShareAlike 4.0 International License"
 
 [cc-by-sa-img-small]: img/cc-by-sa-small.png "Creative Commons Attribution ShareAlike 4.0 International License"
-
-[![][github-badge]][github-repo]
 
 [github-repo]: https://github.com/tonejito/github-actions-playground
 
