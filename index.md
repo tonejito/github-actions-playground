@@ -1,6 +1,6 @@
 ---
 title: Tareas en GIT
-subtitle: add, commit, push, repeat.
+subtitle: add, commit, push, repeat
 author:
 - Andrés Hernández - `tonejito`
 date: 2023 - 04
@@ -18,11 +18,9 @@ lang: es-MX
 
 ## ¿Por qué 🤬 pido a los alumnos que entreguen las tareas en `git`?	{ .slide: data-visibility="hidden,uncounted" }
 
-&nbsp;
-
 Andrés Hernández - `tonejito`
 
-2023 - 04
+![][🐰]
 
 <!-- <img id="mail" class="mail" alt="📩" title="📩" loading="eager" src="img/mail.svg" /> -->
 
@@ -31,6 +29,8 @@ Andrés Hernández - `tonejito`
 <!--
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 -->
+
+[🐰]: https://gravatar.com/avatar/4cc702785290b4934c531c56f6061e5e.png "🐰"
 
 [cc-by-sa-page]: http://creativecommons.org/licenses/by-sa/4.0/ "CC-BY-SA-4.0"
 
