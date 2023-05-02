@@ -1,0 +1,78 @@
+#	.gitlab-ci.yml
+
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+stages:
+  - test
+  - build
+  - deploy
+
+# image: pandoc/extra:3.1-ubuntu
+image: python:3.11-slim-bullseye
+
+before_script:
+  - ./bootstrap.sh
+
+variables:
+  ENV: "var"
+
+test:
+  # image: python:3.11-slim-bullseye
+  stage: test
+  # variables:
+  #   PATH: "${HOME}/.local/bin:${PATH}"
+  script:
+  # - echo ${PATH}
+  - make test
+  artifacts:
+    paths:
+    - test
+  # except:
+  only:
+  - master
+  - main
+
+build:
+  # image: python:3.11-slim-bullseye
+  stage: build
+  # variables:
+  #   PATH: "${HOME}/.local/bin:${PATH}"
+  script:
+  - make build
+  artifacts:
+    paths:
+    - public
+  only:
+  - main
+  - master
+
+pages:
+  # image: python:3.11-slim-bullseye
+  # image: pandoc/extra:3.1-ubuntu
+  stage: deploy
+  # variables:
+  #   PATH: "${HOME}/.local/bin:${PATH}"
+  script:
+  - ls -la public
+  artifacts:
+    paths:
+    - public
+  only:
+  - main
+  - master
