@@ -154,6 +154,19 @@ jobs:
         shell: bash
     steps:
 
+      - name: Debian APT
+        shell: bash
+        env:
+          TERM: linux
+          DEBIAN_PRIORITY: critical
+          DEBIAN_FRONTEND: noninteractive
+          DEBCONF_NOWARNINGS: "yes"
+          DEBCONF_TERSE: "yes"
+          DEBCONF_NONINTERACTIVE_SEEN: "true"
+        run: |
+          apt-get -q=2 update
+          apt-get -qqy install git
+
       - name: Fix permissions on HOME
         shell: bash
         run: |
@@ -168,16 +181,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          clean: false
+          fetch-depth: 0
           set-safe-directory: true
 
       # Add repository path as safe.directory for git "system" config
       # This is needed when running inside a container
       - name: Mark repository as 'safe' in SYSTEM git config
         shell: bash
+        env:
+          # GIT_CONFIG_FILES: /etc/gitconfig ${HOME}/.gitconfig .git/config
+          GIT_CONFIG_LOCATIONS: --system --global --local
         run: |
-          git config --system --add safe.directory "${GITHUB_WORKSPACE}"
+          for GIT_CONFIG_LOCATION in ${GIT_CONFIG_LOCATIONS}
+          do
+            git config ${GIT_CONFIG_LOCATION} --add safe.directory "${GITHUB_WORKSPACE}"
+          done
+
+      - name: Fix permissions on GITHUB_WORKSPACE
+        shell: bash
+        run: |
           chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}"
 
+      # This step needs to be AFTER checkout since the script is INSIDE the repo
       - name: Run bootstrap script
         shell: bash
         env:
@@ -194,7 +220,7 @@ jobs:
       #     mkdir -vp $(dirname "${APT_CONF_LOCAL}")
       #     truncate --size=0 "${APT_CONF_LOCAL}"
       #     cat | tee -a "${APT_CONF_LOCAL}" << EOF
-      #       #	/etc/apt/apt.conf.d/99-local
+      #       # /etc/apt/apt.conf.d/99-local
       #       quiet "2";
       #       APT::Get::Assume-Yes "1";
       #       APT::Install-Recommends "0";
@@ -250,8 +276,7 @@ jobs:
       #   shell: bash
       #   run: |
       #     pre-commit install || cat ${HOME}/.cache/pre-commit/pre-commit.log
-      #     pre-commit run --all-files
-      #     make check
+      #     pre-commit run --all-files --show-diff-on-failure --color=always
 
       - name: Run pre-commit via Makefile
         shell: bash
@@ -266,6 +291,12 @@ jobs:
         # WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager.
         # It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
       image: python:3.11-slim-bullseye
+      volumes:
+      - /tmp
+    env:
+      # FIXME: Unrecognized named-value: 'runner'. Located at position 1 within expression: runner.temp
+      # TMP_DIR: ${{ runner.temp }}
+      TMP_DIR: /tmp
     defaults:
       run:
         shell: bash
@@ -291,8 +322,21 @@ jobs:
       # This is needed when running inside a container
       - name: Mark repository as 'safe' in SYSTEM git config
         shell: bash
+        env:
+          # GIT_CONFIG_FILES: /etc/gitconfig ${HOME}/.gitconfig .git/config
+          GIT_CONFIG_FILES: /etc/gitconfig ${HOME}/.gitconfig
+          # GIT_CONFIG_LOCATIONS: --system --global --local
+        # 'git' is not installed at this time
         run: |
-          git config --system --add safe.directory "${GITHUB_WORKSPACE}"
+          dirname ${GIT_CONFIG_FILES} | xargs -r -t mkdir -vp
+          for GIT_CONFIG_FILE in ${GIT_CONFIG_FILES}
+          do
+            printf '[%s]\n\t%s = %s\n' "safe" "directory" "${GITHUB_WORKSPACE}" >> "${GIT_CONFIG_FILE}"
+          done
+
+      - name: Fix permissions on GITHUB_WORKSPACE
+        shell: bash
+        run: |
           chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}"
 
       - name: Run bootstrap script
@@ -331,14 +375,14 @@ jobs:
             --directory public \
             --exclude=.git \
             --exclude=.gitkeep \
-            -cvf ${{ runner.temp }}/artifact.tar \
+            -cvf /tmp/artifact.tar \
             .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           name: github-pages
-          path: ${{ runner.temp }}/artifact.tar
+          path: /tmp/artifact.tar
           if-no-files-found: error
           retention-days: 0
 
