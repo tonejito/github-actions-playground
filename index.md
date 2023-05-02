@@ -25,17 +25,19 @@ Andrés Hernández - `tonejito`
 :::::::::::::: {.columns}
 ::: {.column width="33%"}
 
-![][🐰]
-
-:::
-::: {.column width="33%"}
-
 [![][cc-by-sa-img-big]][cc-by-sa-page]
 
 :::
 ::: {.column width="33%"}
 
+![][🐰]
+
+:::
+::: {.column width="33%"}
+
 [![][github-badge]][github-repo]
+<br/>
+[![][gitlab-badge]][gitlab-repo]
 
 :::
 ::::::::::::::
@@ -64,6 +66,10 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 [github-repo]: https://github.com/tonejito/github-actions-playground
 
 [github-badge]: https://github.com/tonejito/github-actions-playground/actions/workflows/github-pages.yaml/badge.svg?branch=main
+
+[gitlab-repo]: https://gitlab.com/tonejito/gitlab-cicd-playground
+
+[gitlab-badge]: https://gitlab.com/tonejito/gitlab-cicd-playground/badges/main/pipeline.svg
 
 --------------------------------------------------------------------------------
 
